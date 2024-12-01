@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Admin Portal</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+      .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        background: rgba(0, 0, 0, 0.233);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        backdrop-filter: blur(10px);
+      }
+
+      .logout-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 2rem;
+        margin-left: 25px;
+        background: rgba(255, 51, 102, 0.9);
+        border-radius: 10px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .logout-btn:hover {
+        background: #ff4477;
+        transform: translateY(-2px);
+      }
+
+      .admin-content {
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+      }
+
+      .admin-card {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .admin-card:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .admin-card i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+
+      .admin-card h2 {
+        margin-bottom: 1rem;
+      }
+
+      .admin-card p {
+        color: rgba(255, 255, 255, 0.7);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="admin-header">
+        <h1>Admin Dashboard</h1>
+        <button onclick="logout()" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          Logout
+        </button>
+      </div>
+      <div class="admin-content">
+        <div class="admin-card" onclick="window.location.href='admin-users.html'">
+          <i class="fas fa-users"></i>
+          <h2>User Management</h2>
+          <p>Manage faculty and student accounts</p>
+        </div>
+        
+        <div class="admin-card" onclick="window.location.href='admin-notices.html'">
+          <i class="fas fa-bullhorn"></i>
+          <h2>Notice Board</h2>
+          <p>Broadcast announcements and notices</p>
+        </div>
+        
+        <div class="admin-card" onclick="window.location.href='admin-accounts.html'">
+          <i class="fas fa-bank"></i>
+          <h2>Accounts</h2>
+          <p>Manage salaries and fees</p>
+        </div>
+      </div>
+    </main>
+    
+    <script>
+      function logout() {
+        window.location.href = 'index.html';
+      }
+    </script>
+  </body>
+</html>

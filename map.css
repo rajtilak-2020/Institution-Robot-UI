@@ -1,0 +1,65 @@
+/* Apply a linear gradient as the background */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Style for the Go Back button */
+.go-back {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #ffffff;
+    background: #ff3366;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.go-back:hover {
+    background: #f00b57;
+}
+
+/* Container for the Google Map */
+.map-container {
+    width: 90%; /* Visible width */
+    height: 70%; /* Visible height */
+    overflow: hidden; /* Hide overflow elements */
+    border: 2px solid #000000;
+    border-radius: 35px;
+    box-shadow: 0 4px 10px rgb(0, 0, 0);
+    position: relative;
+}
+
+/* Larger iframe to hide interactive buttons */
+.map {
+    width: 150%;
+    height: 150%;
+    position: absolute;
+    top: -30%;
+    left: -30%;
+    border: none;
+}
+
+/* Optimize layout for landscape orientation */
+@media screen and (orientation: landscape) {
+    .map-container {
+        width: 80%;
+        height: 80%;
+    }
+
+    .go-back {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}

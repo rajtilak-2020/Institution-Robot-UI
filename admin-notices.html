@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Notice Board - Admin Portal</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+      .container {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .notice-list {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 1rem;
+        overflow-y: auto;
+      }
+
+      .notice-form {
+        padding: 2rem;
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      .notice-item {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+      }
+
+      .notice-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+      }
+
+      .notice-targets {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .notice-target {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding: 1rem;
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .back-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 51, 102, 0.9);
+        border-radius: 8px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .back-btn:hover {
+        background: #ff4477;
+        transform: translateY(-2px);
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 150px;
+        padding: 0.5rem;
+        border-radius: 4px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(0, 0, 0, 0.2);
+        color: white;
+        margin-bottom: 1rem;
+      }
+
+      .target-options {
+        display: grid;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 0.8rem;
+        background: #33cc33;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .submit-btn:hover {
+        background: #2eb82e;
+      }
+
+      .delete-btn {
+        padding: 0.3rem 0.6rem;
+        background: #ff3366;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .delete-btn:hover {
+        background: #ff1a1a;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Notice Board Management</h1>
+      <button onclick="window.location.href='admin.html'" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        Back to Dashboard
+      </button>
+    </div>
+
+    <div class="container">
+      <div class="notice-list">
+        <div id="notices"></div>
+      </div>
+
+      <div class="notice-form">
+        <h2>Create Notice</h2>
+        <form onsubmit="return addNotice(event)">
+          <textarea id="noticeText" placeholder="Enter notice text..." required></textarea>
+          <div class="target-options">
+            <label>
+              <input type="checkbox" id="facultyTarget"> Faculty
+            </label>
+            <label>
+              <input type="checkbox" id="studentTarget"> Students
+            </label>
+            <label>
+              <input type="checkbox" id="visitorTarget"> Visitors
+            </label>
+          </div>
+          <button type="submit" class="submit-btn">Post Notice</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function displayNotices() {
+        const database = JSON.parse(localStorage.getItem('database'));
+        const noticesDiv = document.getElementById('notices');
+        
+        noticesDiv.innerHTML = database.notices.length > 0 
+          ? database.notices.map((notice, index) => `
+              <div class="notice-item">
+                <div class="notice-header">
+                  <div class="notice-targets">
+                    ${notice.targets.map(t => `
+                      <span class="notice-target">${t}</span>
+                    `).join('')}
+                  </div>
+                  <button onclick="removeNotice(${index})" class="delete-btn">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+                <p>${notice.text}</p>
+              </div>
+            `).join('')
+          : '<p>No notices posted</p>';
+      }
+
+      function addNotice(event) {
+        event.preventDefault();
+        const text = document.getElementById('noticeText').value;
+        const facultyTarget = document.getElementById('facultyTarget').checked;
+        const studentTarget = document.getElementById('studentTarget').checked;
+        const visitorTarget = document.getElementById('visitorTarget').checked;
+
+        if (!facultyTarget && !studentTarget && !visitorTarget) {
+          alert('Please select at least one target audience');
+          return false;
+        }
+
+        const targets = [];
+        if (facultyTarget) targets.push('Faculty');
+        if (studentTarget) targets.push('Students');
+        if (visitorTarget) targets.push('Visitors');
+
+        const database = JSON.parse(localStorage.getItem('database'));
+        database.notices.push({ text, targets });
+        localStorage.setItem('database', JSON.stringify(database));
+        
+        document.getElementById('noticeText').value = '';
+        document.getElementById('facultyTarget').checked = false;
+        document.getElementById('studentTarget').checked = false;
+        document.getElementById('visitorTarget').checked = false;
+        
+        displayNotices();
+        return false;
+      }
+
+      function removeNotice(index) {
+        const database = JSON.parse(localStorage.getItem('database'));
+        database.notices.splice(index, 1);
+        localStorage.setItem('database', JSON.stringify(database));
+        displayNotices();
+      }
+
+      // Initialize
+      displayNotices();
+    </script>
+  </body>
+</html>

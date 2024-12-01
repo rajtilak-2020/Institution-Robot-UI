@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>User Management - Admin Portal</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+      .container {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .sidebar {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 1rem;
+        overflow-y: auto;
+      }
+
+      .main-content {
+        padding: 2rem;
+        overflow-y: auto;
+      }
+
+      .user-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .user-item {
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .user-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .user-item.selected {
+        background: rgba(255, 51, 102, 0.2);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      .back-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 51, 102, 0.9);
+        border-radius: 8px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .back-btn:hover {
+        background: #ff4477;
+        transform: translateY(-2px);
+      }
+
+      .tabs {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .tab {
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .tab.active {
+        background: rgba(255, 51, 102, 0.9);
+      }
+
+      .form-group {
+        margin-bottom: 1rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 4px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(0, 0, 0, 0.2);
+        color: white;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .action-btn {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .add-btn { background: #33cc33; color: white; }
+      .edit-btn { background: #3366ff; color: white; }
+      .remove-btn { background: #ff3366; color: white; }
+
+      .action-btn:hover {
+        transform: translateY(-2px);
+        opacity: 0.9;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="sidebar">
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab('faculty')">Faculty</button>
+          <button class="tab" onclick="switchTab('student')">Students</button>
+        </div>
+        <div id="userList" class="user-list"></div>
+      </div>
+
+      <div class="main-content">
+        <div class="header">
+          <h1>User Management</h1>
+          <button onclick="window.location.href='admin.html'" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Back to Dashboard
+          </button>
+        </div>
+
+        <form id="userForm" onsubmit="return handleSubmit(event)">
+          <div class="form-group">
+            <label for="userId">ID Number</label>
+            <input type="text" id="userId" required minlength="6">
+          </div>
+          <div class="form-group">
+            <label for="userName">Full Name</label>
+            <input type="text" id="userName" required>
+          </div>
+          <div class="action-buttons">
+            <button type="submit" class="action-btn add-btn">
+              <i class="fas fa-plus"></i> Add User
+            </button>
+            <button type="button" class="action-btn edit-btn" onclick="updateUser()">
+              <i class="fas fa-edit"></i> Update
+            </button>
+            <button type="button" class="action-btn remove-btn" onclick="removeUser()">
+              <i class="fas fa-trash"></i> Remove
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      let currentTab = 'faculty';
+      let selectedUser = null;
+
+      function switchTab(tab) {
+        currentTab = tab;
+        document.querySelectorAll('.tab').forEach(t => {
+          t.classList.toggle('active', t.textContent.toLowerCase().includes(tab));
+        });
+        displayUsers();
+        clearForm();
+      }
+
+      function displayUsers() {
+        const database = JSON.parse(localStorage.getItem('database'));
+        const userList = document.getElementById('userList');
+        const users = database[currentTab === 'faculty' ? 'faculty' : 'students'] || {};
+        
+        userList.innerHTML = Object.entries(users).map(([id, data]) => `
+          <div class="user-item ${selectedUser === id ? 'selected' : ''}" 
+               onclick="selectUser('${id}')">
+            <strong>${data.name}</strong><br>
+            <small>${id}</small>
+          </div>
+        `).join('') || '<p>No users found</p>';
+      }
+
+      function selectUser(id) {
+        selectedUser = id;
+        const database = JSON.parse(localStorage.getItem('database'));
+        const userData = database[currentTab === 'faculty' ? 'faculty' : 'students'][id];
+        
+        document.getElementById('userId').value = id;
+        document.getElementById('userName').value = userData.name;
+        
+        displayUsers();
+      }
+
+      function clearForm() {
+        document.getElementById('userForm').reset();
+        selectedUser = null;
+        displayUsers();
+      }
+
+      function handleSubmit(event) {
+        event.preventDefault();
+        const id = document.getElementById('userId').value;
+        const name = document.getElementById('userName').value;
+
+        if (id.length < 6) {
+          alert('ID must be at least 6 characters long');
+          return false;
+        }
+
+        const database = JSON.parse(localStorage.getItem('database'));
+        const userType = currentTab === 'faculty' ? 'faculty' : 'students';
+        
+        if (!database[userType]) {
+          database[userType] = {};
+        }
+        
+        database[userType][id] = { name };
+        localStorage.setItem('database', JSON.stringify(database));
+        
+        clearForm();
+        return false;
+      }
+
+      function updateUser() {
+        if (!selectedUser) {
+          alert('Please select a user to update');
+          return;
+        }
+
+        const id = document.getElementById('userId').value;
+        const name = document.getElementById('userName').value;
+
+        const database = JSON.parse(localStorage.getItem('database'));
+        const userType = currentTab === 'faculty' ? 'faculty' : 'students';
+        
+        if (id !== selectedUser) {
+          delete database[userType][selectedUser];
+        }
+        
+        database[userType][id] = { name };
+        localStorage.setItem('database', JSON.stringify(database));
+        
+        clearForm();
+      }
+
+      function removeUser() {
+        if (!selectedUser) {
+          alert('Please select a user to remove');
+          return;
+        }
+
+        const database = JSON.parse(localStorage.getItem('database'));
+        const userType = currentTab === 'faculty' ? 'faculty' : 'students';
+        
+        delete database[userType][selectedUser];
+        localStorage.setItem('database', JSON.stringify(database));
+        
+        clearForm();
+      }
+
+      // Initialize
+      displayUsers();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>About Us - Faculty Portal</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <link rel="shortcut icon" href="logo.png" type="image/x-icon" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    /* General Scrollable and Body Styling */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    .about-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.5rem;
+      background: rgba(255, 51, 102, 0.9);
+      border-radius: 8px;
+      border: none;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: #ff4477;
+      transform: translateY(-2px);
+    }
+
+    .section {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .section:hover {
+      transform: translateY(-5px);
+    }
+
+    .section h2 {
+      color: #ffcc33;
+      margin-bottom: 1rem;
+    }
+
+    .section p {
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #ffcc33;
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 3rem;
+      border-radius: 20px;
+      margin-top: 4rem;
+      text-align: center;
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 20px rgba(255, 204, 51, 0.1); }
+      to { box-shadow: 0 0 30px rgba(255, 204, 51, 0.2); }
+    }
+
+    .contact-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .contact-card {
+      padding: 1.5rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-3px);
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .contact-card i {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #ffcc33;
+    }
+  </style>
+</head>
+<body>
+  <div class="about-container">
+    <div class="header">
+      <h1>About Our Institution</h1>
+      <button onclick="goBack()" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        Back to Homepage
+      </button>
+    </div>
+
+    <div class="section">
+      <h2>Our Vision</h2>
+      <p>To be a globally recognized institution that nurtures innovative thinking and creates leaders who shape the future of education and technology.</p>
+    </div>
+
+    <div class="section">
+      <h2>Our Mission</h2>
+      <p>To provide world-class education through innovative teaching methodologies, cutting-edge research, and industry collaboration while fostering an environment of continuous learning and growth.</p>
+    </div>
+
+    <div class="section">
+      <h2>Faculty Excellence</h2>
+      <p>Our faculty members are distinguished experts in their fields, committed to academic excellence and innovative research. We pride ourselves on maintaining a collaborative environment that promotes both teaching excellence and scholarly achievement.</p>
+    </div>
+
+    <div class="contact-section">
+      <h2>Contact Us</h2>
+      <p>We're here to help and answer any questions you might have</p>
+      
+      <div class="contact-info">
+        <div class="contact-card">
+          <i class="fas fa-envelope"></i>
+          <h3>Email</h3>
+          <p>driemsdiploma@driems.ac.in</p>
+        </div>
+        
+        <div class="contact-card">
+          <i class="fas fa-phone"></i>
+          <h3>Phone</h3>
+          <p>+91 6712595061</p>
+        </div>
+        
+        <div class="contact-card">
+          <i class="fas fa-map-marker-alt"></i>
+          <h3>Location</h3>
+          <p>DRIEMS Polytechnic
+            Tangi, Cuttack Odisha, India</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function goBack() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const userId = urlParams.get('id');
+      window.location.href = `index.html?id=${userId}`;
+    }
+  </script>
+</body>
+</html>

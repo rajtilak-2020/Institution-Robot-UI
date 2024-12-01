@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Robot UI</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon" />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="script.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <main>
+      <div class="eyes-container">
+        <div class="eye">
+          <div class="pupil"></div>
+          <div class="eye-shine"></div>
+        </div>
+        <div class="eye">
+          <div class="pupil"></div>
+          <div class="eye-shine"></div>
+        </div>
+      </div>
+      
+      <div class="buttons-container">
+        <button class="portal-btn admin-btn" onclick="showLoginModal('admin')">
+          <span class="btn-icon">🔐</span>
+          <span class="btn-text">Admin Portal</span>
+        </button>
+        <button class="portal-btn faculty-btn" onclick="showLoginModal('faculty')">
+          <span class="btn-icon">👩‍🏫</span>
+          <span class="btn-text">Faculty Portal</span>
+        </button>
+        <button class="portal-btn student-btn" onclick="showLoginModal('student')">
+          <span class="btn-icon">👨‍🎓</span>
+          <span class="btn-text">Student Portal</span>
+        </button>
+        <button class="portal-btn visitor-btn" onclick="window.location.href='visitor.html'">
+          <span class="btn-icon">👥</span>
+          <span class="btn-text">Visitor Portal</span>
+        </button>
+      </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeLoginModal()">&times;</span>
+        <h2 id="modalTitle">Login</h2>
+        <form id="loginForm" onsubmit="return handleLogin(event)">
+          <div class="form-group">
+            <label for="loginId">ID/Registration Number:</label>
+            <input type="text" id="loginId" required>
+          </div>
+          <div id="passwordGroup" class="form-group" style="display: none;">
+            <label for="password">Password:</label>
+            <input type="password" id="password">
+          </div>
+          <button type="submit" class="login-btn">Login</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      let currentLoginType = '';
+
+      // Eye movement tracking
+      document.addEventListener('mousemove', (e) => {
+        const eyes = document.querySelectorAll('.pupil');
+        eyes.forEach(eye => {
+          const rect = eye.getBoundingClientRect();
+          const x = (rect.left + rect.width / 2);
+          const y = (rect.top + rect.height / 2);
+          const rad = Math.atan2(e.pageX - x, e.pageY - y);
+          const rot = (rad * (180 / Math.PI) * -1) + 180;
+          eye.style.transform = `rotate(${rot}deg)`;
+        });
+      });
+
+      // Login Modal Functions
+      function showLoginModal(type) {
+        currentLoginType = type;
+        const modal = document.getElementById('loginModal');
+        const passwordGroup = document.getElementById('passwordGroup');
+        const modalTitle = document.getElementById('modalTitle');
+        
+        modalTitle.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)} Login`;
+        passwordGroup.style.display = type === 'admin' ? 'block' : 'none';
+        modal.style.display = 'block';
+      }
+
+      function closeLoginModal() {
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('loginForm').reset();
+      }
+
+      function handleLogin(event) {
+        event.preventDefault();
+        const id = document.getElementById('loginId').value;
+        const password = document.getElementById('password')?.value;
+        const database = JSON.parse(localStorage.getItem('database'));
+
+        if (currentLoginType === 'admin') {
+          if (id === database.admin.id && password === database.admin.password) {
+            window.location.href = 'admin.html?id=' + id;
+          } else {
+            alert('Invalid admin credentials!');
+          }
+        } else if (currentLoginType === 'faculty') {
+          if (database.faculty[id]) {
+            window.location.href = 'faculty.html?id=' + id;
+          } else {
+            alert('Invalid faculty ID!');
+          }
+        } else if (currentLoginType === 'student') {
+          if (database.students[id]) {
+            window.location.href = 'student.html?id=' + id;
+          } else {
+            alert('Invalid student ID!');
+          }
+        }
+
+        return false;
+      }
+
+      // Close modal when clicking outside
+      window.onclick = function(event) {
+        const modal = document.getElementById('loginModal');
+        if (event.target === modal) {
+          closeLoginModal();
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Faculty Portal</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+      .portal-container {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .main-content {
+        padding: 2rem;
+        overflow-y: auto;
+      }
+
+      .notice-board {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 1rem;
+        height: 100vh;
+        overflow-y: auto;
+      }
+
+      .notice-item {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      .nav-buttons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .nav-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+      }
+
+      .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .nav-btn i {
+        font-size: 1.2rem;
+      }
+
+      .about-btn { border-left: 4px solid #33cc33; }
+      .contact-btn { border-left: 4px solid #ff3366; }
+
+      .back-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 51, 102, 0.9);
+        border-radius: 8px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .back-btn:hover {
+        background: #ff4477;
+        transform: translateY(-2px);
+      }
+
+      .welcome-card {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 2rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+      }
+
+      .account-info {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 2rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+      }
+
+      .account-info h2 {
+        margin-bottom: 1rem;
+      }
+
+      .amount {
+        font-size: 2rem;
+        color: #33cc33;
+      }
+
+      .error-message {
+        color: #ff3366;
+        text-align: center;
+        padding: 2rem;
+        font-size: 1.2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="portal-container">
+      <div class="main-content">
+        <div class="header">
+          <h1>Faculty Portal</h1>
+          <button onclick="window.location.href='index.html'" class="back-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+          </button>
+        </div>
+
+        <div id="welcomeCard" class="welcome-card"></div>
+        
+        <div class="account-info">
+          <h2>Salary Information</h2>
+          <div id="accountInfo"></div>
+        </div>
+
+        <div class="nav-buttons">
+          <!-- Replace 'your-about-page.html' with your actual about page URL -->
+          <button onclick="window.location.href='about-faculty.html'" class="nav-btn about-btn">
+            <i class="fas fa-info-circle"></i>
+            About Us
+          </button>
+          
+          <!-- Replace 'your-contact-page.html' with your actual contact page URL -->
+          <button onclick="window.location.href='contact.html'" class="nav-btn contact-btn">
+            <i class="fas fa-envelope"></i>
+            Contact Admin
+          </button>
+        </div>
+      </div>
+      
+      <div class="notice-board">
+        <h2>Notice Board</h2>
+        <div id="notices"></div>
+      </div>
+    </div>
+
+    <script>
+      function displayUserInfo() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('id');
+        const database = JSON.parse(localStorage.getItem('database'));
+        
+        // Check if user exists
+        if (!database.faculty || !database.faculty[userId]) {
+          document.body.innerHTML = `
+            <div class="error-message">
+              <h2>Access Denied</h2>
+              <p>Invalid faculty ID or user not found.</p>
+              <button onclick="window.location.href='index.html'" class="back-btn" style="margin-top: 1rem;">
+                <i class="fas fa-home"></i>
+                Back to Home
+              </button>
+            </div>
+          `;
+          return;
+        }
+        
+        const userData = database.faculty[userId];
+        const accountData = database.accounts?.faculty?.[userId] || 0;
+        
+        document.getElementById('welcomeCard').innerHTML = `
+          <h2>Welcome, ${userData.name}!</h2>
+          <p>Faculty ID: ${userId}</p>
+        `;
+        
+        document.getElementById('accountInfo').innerHTML = `
+          <p>Pending Salary:</p>
+          <p class="amount">₹${accountData}</p>
+        `;
+      }
+
+      function displayNotices() {
+        const database = JSON.parse(localStorage.getItem('database'));
+        const noticesDiv = document.getElementById('notices');
+        
+        if (!database.notices) {
+          database.notices = [];
+          localStorage.setItem('database', JSON.stringify(database));
+        }
+        
+        const facultyNotices = database.notices.filter(notice => 
+          notice.targets && notice.targets.includes('Faculty')
+        );
+        
+        noticesDiv.innerHTML = facultyNotices.length > 0 
+          ? facultyNotices.map(notice => `
+              <div class="notice-item">
+                <p>${notice.text}</p>
+              </div>
+            `).join('')
+          : '<p>No notices available</p>';
+      }
+
+      // Initialize
+      displayUserInfo();
+      displayNotices();
+    </script>
+  </body>
+</html>

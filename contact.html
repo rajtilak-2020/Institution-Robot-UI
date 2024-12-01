@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact the Developer</title>
+  <link rel="shortcut icon" href="mylogo.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Times New Roman', Times, serif;
+      background: linear-gradient(90deg, #020202, #282828);
+      color: white;
+      text-align: center;
+      overflow-x: hidden;
+      box-shadow: #00ff08;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .header {
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin: 10px 0;
+      color: #00ff08;
+      animation: bounceIn 1s ease;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      color: #bbbbbb;
+      animation: fadeIn 2s ease-out;
+    }
+
+    .developer-info {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    .developer-image img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .developer-image img:hover {
+      transform: scale(1.1);
+    }
+
+    .developer-details h2 {
+      margin: 5px 0;
+      font-size: 1.8rem;
+      color: #ffffff;
+    }
+
+    .developer-details p {
+      margin: 5px 0;
+      font-size: 1.1rem;
+      color: #cccccc;
+    }
+
+    .contact-section {
+      margin-top: 40px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      animation: fadeInUp 1.5s ease-out;
+    }
+
+    .contact-section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: #00ff08;
+    }
+
+    .contact-section .contact-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .contact-info p {
+      font-size: 1.1rem;
+      color: #ffffff;
+    }
+
+    .social-links {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      animation: fadeIn 2s ease-out;
+    }
+
+    .social-links p {
+      margin: 5px 0;
+      font-size: 1.2rem;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .social-links i {
+      color: #00ff08;
+      transition: transform 0.3s ease;
+    }
+
+    .social-links i:hover {
+      transform: scale(1.2);
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(255, 51, 102, 0.9);
+      border-radius: 8px;
+      border: none;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      font-size: 1rem;
+      animation: slideIn 0.5s ease-in-out;
+    }
+
+    .back-btn:hover {
+      background: #ff4477;
+      transform: translateY(-2px);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounceIn {
+      from { opacity: 0; transform: translateY(-50px); }
+      60% { opacity: 1; transform: translateY(10px); }
+      100% { transform: translateY(0); }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100px); }
+      to { transform: translateX(0); }
+    }
+  </style>
+</head>
+<body>
+  <button onclick="window.location.href='index.html'" class="back-btn">Back to Homepage</button>
+  <div class="container">
+    <div class="header">
+      <h1>Contact the Developer</h1>
+      <p>Feel free to learn more about the developer.</p>
+    </div>
+
+    <div class="contact-section">
+      <h2>Project Information</h2>
+      <p>This project is focused on creating an interactive UI for a robot designed
+         to operate on a college campus. The robot will be able to interact with
+          four distinct user types: Admin, Faculty, Students, and Visitors. Each
+           user type will have access to different functionalities, with Admin,
+            Faculty, and Student pages being password-protected for secure access.</p>
+<p>The landing page features an attractive robot face with large eyes and four interactive
+   options for each user type. The UI is designed to be engaging, simple to navigate, and 
+   responsive across different devices. This system aims to provide seamless interaction
+    between the robot and campus users, enhancing the overall experience.</p>
+
+      <h2>Contact Details</h2>
+      <div class="contact-info">
+        <p><strong>Email:</strong> rajtilak1062020@gmail.com</p>
+        <p><strong>Phone:</strong> +91 7008818173</p>
+      </div>
+
+      <div class="social-links">
+        <p><i class="fab fa-github"></i>@rajtilak-2020  <i class="fab fa-twitter"></i>@2020rajtilak <i class="fab fa-linkedin"></i>@krajtilak2020</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

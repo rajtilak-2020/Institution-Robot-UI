@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Accounts Management - Admin Portal</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+      .container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding: 1rem;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+      }
+
+      .back-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 51, 102, 0.9);
+        border-radius: 8px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .back-btn:hover {
+        background: #ff4477;
+        transform: translateY(-2px);
+      }
+
+      .accounts-section {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 2rem;
+        border-radius: 8px;
+      }
+
+      .accounts-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+      }
+
+      .accounts-table th,
+      .accounts-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .accounts-table th {
+        background: rgba(0, 0, 0, 0.2);
+        font-weight: bold;
+      }
+
+      .amount-input {
+        width: 120px;
+        padding: 0.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        background: rgba(0, 0, 0, 0.2);
+        color: white;
+      }
+
+      .save-btn {
+        padding: 0.5rem 1rem;
+        background: #33cc33;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .save-btn:hover {
+        background: #2eb82e;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .tab {
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .tab.active {
+        background: rgba(255, 51, 102, 0.9);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Accounts Management</h1>
+      <button onclick="window.location.href='admin.html'" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        Back to Dashboard
+      </button>
+    </div>
+
+    <div class="container">
+      <div class="accounts-section">
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab('faculty')">Faculty Salaries</button>
+          <button class="tab" onclick="switchTab('student')">Student Fees</button>
+        </div>
+        <div id="accountsTable"></div>
+      </div>
+    </div>
+
+    <script>
+      let currentTab = 'faculty';
+
+      function switchTab(tab) {
+        currentTab = tab;
+        document.querySelectorAll('.tab').forEach(t => {
+          t.classList.toggle('active', t.textContent.toLowerCase().includes(tab));
+        });
+        displayAccounts();
+      }
+
+      function displayAccounts() {
+        const database = JSON.parse(localStorage.getItem('database'));
+        const userType = currentTab === 'faculty' ? 'faculty' : 'students';
+        const users = database[userType] || {};
+        const accounts = (database.accounts && database.accounts[userType]) || {};
+        const tableDiv = document.getElementById('accountsTable');
+        
+        const title = currentTab === 'faculty' ? 'Pending Salary' : 'Pending Fees';
+        
+        if (!database.accounts) {
+          database.accounts = { faculty: {}, students: {} };
+          localStorage.setItem('database', JSON.stringify(database));
+        }
+        
+        tableDiv.innerHTML = `
+          <table class="accounts-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>${title}</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${Object.entries(users).map(([id, data]) => `
+                <tr>
+                  <td>${id}</td>
+                  <td>${data.name}</td>
+                  <td>
+                    <input type="number" 
+                           class="amount-input" 
+                           value="${accounts[id] || 0}"
+                           id="amount_${id}">
+                  </td>
+                  <td>
+                    <button class="save-btn" onclick="updateAmount('${id}')">
+                      Save
+                    </button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
+      }
+
+      function updateAmount(id) {
+        const amount = document.getElementById(`amount_${id}`).value;
+        const database = JSON.parse(localStorage.getItem('database'));
+        const userType = currentTab === 'faculty' ? 'faculty' : 'students';
+        
+        if (!database.accounts[userType]) {
+          database.accounts[userType] = {};
+        }
+        
+        database.accounts[userType][id] = parseFloat(amount) || 0;
+        localStorage.setItem('database', JSON.stringify(database));
+        
+        alert('Amount updated successfully!');
+      }
+
+      // Initialize
+      displayAccounts();
+    </script>
+  </body>
+</html>
