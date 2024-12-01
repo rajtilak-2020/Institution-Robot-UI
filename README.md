@@ -42,7 +42,7 @@
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/educational-portal.git
+   https://github.com/rajtilak-2020/Institution-Robot-UI.git
    ```
 
 2. **Install dependencies**
