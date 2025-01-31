@@ -163,7 +163,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For any queries or support, please contact:
 
 - Email: rajtilak1062020@gmailcom
-- Linkedin: www.linkedin.com/in/krajtilak2020
+- Linkedin: krajtilak2020
 
 ---
 
